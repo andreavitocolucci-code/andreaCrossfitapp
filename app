@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Andrea Crossfit</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+  :root{--bg:#0a0a0a;--sf:#141414;--sf2:#1c1c1c;--bd:#2a2a2a;--gr:#39ff14;--gd:#1a7a06;--or:#ff8c00;--bl:#00bfff;--wh:#f0f0f0;--gy:#555;--gl:#888;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{background:var(--bg);color:var(--wh);font-family:'Rajdhani',sans-serif;min-height:100vh;max-width:480px;margin:0 auto;padding-bottom:84px;}
+
+  /* HEADER */
+  .hdr{position:sticky;top:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:14px 20px 10px;border-bottom:1px solid var(--bd);}
+  .logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:4px;color:var(--wh);display:flex;flex-direction:column;align-items:center;line-height:1;}
+  .logo span{color:var(--gr);font-size:18px;}
+
+  /* NAV */
+  .nav{display:flex;background:var(--sf);border-bottom:1px solid var(--bd);}
+  .ntab{flex:1;padding:12px 8px;text-align:center;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1.5px;color:var(--gl);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;}
+  .ntab.on{color:var(--gr);border-bottom-color:var(--gr);}
+
+  /* PILLS */
+  .pills{display:flex;gap:8px;padding:0 20px 14px;overflow-x:auto;scrollbar-width:none;}
+  .pills::-webkit-scrollbar{display:none;}
+  .pill{padding:7px 16px;border-radius:20px;border:1px solid var(--bd);font-family:'Rajdhani',sans-serif;font-weight:600;font-size:13px;color:var(--gl);cursor:pointer;white-space:nowrap;transition:all .2s;background:var(--sf);}
+  .pill.on{background:var(--gr);color:#000;border-color:var(--gr);font-weight:700;}
+
+  /* SECTION TITLE */
+  .stitle{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;padding:18px 20px 10px;}
+
+  /* EXERCISE CARDS */
+  .ccon{padding:0 14px;display:flex;flex-direction:column;gap:10px;}
+  .xcard{background:var(--sf);border-radius:14px;border:1px solid var(--bd);padding:14px 14px 12px;}
+  .xhdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+  .xname{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:16px;color:var(--wh);flex:1;padding-right:10px;}
+  .xtgt{display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .tlbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gl);letter-spacing:1px;}
+  .tval{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--gr);line-height:1;}
+  .xbody{display:flex;align-items:center;gap:10px;}
+  .vinp{flex:1;background:var(--sf2);border:1px solid var(--bd);border-radius:8px;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--wh);outline:none;width:100%;}
+  .vinp:focus{border-color:var(--gr);}
+  .twrap{display:flex;align-items:center;gap:4px;flex:1;}
+  .tinp{width:56px;background:var(--sf2);border:1px solid var(--bd);border-radius:8px;padding:10px 8px;font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--wh);text-align:center;outline:none;}
+  .tinp:focus{border-color:var(--gr);}
+  .tsep{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--gy);}
+  .rbwrap{display:flex;align-items:center;gap:8px;}
+  .rwrap{position:relative;width:44px;height:44px;}
+  .rtxt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:var(--wh);}
+  .lbtn{width:40px;height:40px;border-radius:10px;background:var(--gr);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
+  .lbtn:active{transform:scale(.92);}
+  .lbtn.z{background:var(--sf2);}
+  .lbtn svg{width:18px;height:18px;}
+
+  /* WEEK */
+  .wkhdr{display:flex;align-items:center;justify-content:space-between;padding:0 14px 12px;}
+  .wklbl{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gl);letter-spacing:1px;}
+  .wkgrid{padding:0 14px;}
+  .dcard{background:var(--sf);border-radius:14px;border:1px solid var(--bd);margin-bottom:10px;overflow:hidden;}
+  .dhdr{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;}
+  .dlft{display:flex;align-items:center;gap:12px;}
+  .dbadge{width:38px;height:38px;border-radius:10px;background:var(--sf2);border:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
+  .dnum{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gr);line-height:1;}
+  .dmon{font-size:8px;color:var(--gl);letter-spacing:1px;}
+  .dname{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--wh);}
+  .dmod{font-size:11px;font-family:'Rajdhani',sans-serif;font-weight:600;letter-spacing:1px;text-transform:uppercase;}
+  .dchev{color:var(--gy);transition:transform .25s;font-size:14px;}
+  .dchev.op{transform:rotate(180deg);}
+  .dbody{display:none;padding:0 14px 14px;}
+  .dbody.op{display:block;}
+
+  .wkblock{border-radius:10px;padding:12px;margin-top:8px;background:var(--sf2);border-left:3px solid var(--gr);}
+  .btag{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2px;padding:3px 8px;border-radius:4px;background:#ffffff12;color:var(--wh);display:inline-block;margin-bottom:8px;}
+  .bsec{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;color:var(--gr);margin:8px 0 4px;}
+  .btxt{font-family:'Rajdhani',sans-serif;font-size:14px;line-height:1.55;color:#ccc;white-space:pre-line;}
+
+  .score-row{display:flex;align-items:center;gap:8px;margin-top:12px;padding:10px 12px;background:#ffffff05;border-radius:8px;border:1px dashed var(--bd);}
+  .slbl{font-family:'Bebas Neue',sans-serif;letter-spacing:1px;color:var(--gl);font-size:13px;flex-shrink:0;}
+  .sinp{flex:1;background:transparent;border:none;outline:none;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--gr);}
+  .sinp::placeholder{color:var(--gy);font-size:13px;}
+  .sbtn{background:var(--gr);border:none;border-radius:6px;padding:6px 12px;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:12px;color:#000;letter-spacing:1px;}
+
+  /* STATS */
+  .ocard{background:linear-gradient(135deg,#0d2e0d,#1a1a1a);border:1px solid var(--gd);border-radius:16px;padding:20px;margin:0 14px 14px;display:flex;align-items:center;gap:20px;}
+  .opct{font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--gr);line-height:1;}
+  .olbl{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;color:var(--gl);font-size:12px;}
+  .osub{font-size:13px;color:var(--gl);margin-top:4px;}
+  .swrap{padding:0 14px;}
+  .sclbl{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;color:#888;font-size:13px;padding:10px 2px 6px;}
+  .srow{display:flex;justify-content:space-between;align-items:center;background:var(--sf);border-radius:12px;padding:14px 16px;margin-bottom:8px;border:1px solid var(--bd);}
+  .sname{font-weight:600;font-size:15px;}
+  .spct{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;}
+  .sval{font-size:12px;color:var(--gl);font-family:'JetBrains Mono',monospace;}
+
+  /* TOAST */
+  .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--gr);color:#000;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;padding:10px 24px;border-radius:20px;opacity:0;pointer-events:none;transition:all .3s;z-index:300;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  .hidden{display:none!important;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <span style="color:var(--gr);font-size:22px">&#9679;</span>
+  <div class="logo">DMNTR<span>&#9670;</span></div>
+  <span style="color:var(--gr);font-size:22px">&#9776;</span>
+</div>
+
+<div class="nav">
+  <div class="ntab on" onclick="showPage('massimali')">MASSIMALI</div>
+  <div class="ntab" onclick="showPage('week')">SETTIMANA</div>
+  <div class="ntab" onclick="showPage('stats')">STATS</div>
+</div>
+
+<!-- MASSIMALI -->
+<div id="page-massimali">
+  <div class="stitle">I TUOI MASSIMALI</div>
+  <div class="pills">
+    <div class="pill on" onclick="swCat('gymnastic',this)">Gymnastic</div>
+    <div class="pill" onclick="swCat('weightlifting',this)">Weightlifting</div>
+    <div class="pill" onclick="swCat('strength',this)">Strength</div>
+    <div class="pill" onclick="swCat('workout',this)">Workout</div>
+  </div>
+  <div id="cat-gymnastic" class="ccon"></div>
+  <div id="cat-weightlifting" class="ccon hidden"></div>
+  <div id="cat-strength" class="ccon hidden"></div>
+  <div id="cat-workout" class="ccon hidden"></div>
+</div>
+
+<!-- SETTIMANA -->
+<div id="page-week" class="hidden">
+  <div class="stitle">SETTIMANA</div>
+  <div class="wkhdr"><div class="wklbl">1 – 7 GIU 2026</div></div>
+  <div class="wkgrid" id="week-grid"></div>
+</div>
+
+<!-- STATS -->
+<div id="page-stats" class="hidden">
+  <div class="stitle">STATISTICHE</div>
+  <div class="ocard">
+    <svg width="80" height="80" viewBox="0 0 80 80">
+      <circle cx="40" cy="40" r="34" fill="none" stroke="#1a3a1a" stroke-width="7"/>
+      <circle id="oring" cx="40" cy="40" r="34" fill="none" stroke="#39ff14" stroke-width="7"
+        stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="213.6"
+        transform="rotate(-90 40 40)" style="transition:.6s ease"/>
+    </svg>
+    <div>
+      <div class="olbl">OVERALL PROGRESS</div>
+      <div class="opct" id="opct">0%</div>
+      <div class="osub" id="osub">—</div>
+    </div>
+  </div>
+  <div class="swrap" id="stats-list"></div>
+</div>
+
+<div class="toast" id="toast">SALVATO</div>
+
+<script>
+const EX={
+  gymnastic:[
+    {id:'g1',name:'Strict HSPU Face Wall',target:30,type:'reps'},
+    {id:'g2',name:'Max effort Strict Ring Muscle ups',target:12,type:'reps'},
+    {id:'g3',name:'Max effort Kip Ring Muscle ups',target:30,type:'reps'},
+    {id:'g4',name:'Max effort Strict Pull ups',target:35,type:'reps'},
+    {id:'g5',name:'Max effort Kip Toes to bar',target:60,type:'reps'},
+    {id:'g6',name:'Max effort Kip HSPU',target:90,type:'reps'},
+    {id:'g7',name:'Max effort Strict HSPU',target:40,type:'reps'},
+    {id:'g8',name:'Max effort Kip Parallettes HSPU',target:30,type:'reps'},
+    {id:'g9',name:'Max effort Strict Parallettes HSPU',target:12,type:'reps'},
+    {id:'g10',name:'Max effort Kip Bar Muscle ups',target:40,type:'reps'},
+    {id:'g11',name:'Max effort Kip Pull ups',target:80,type:'reps'},
+    {id:'g12',name:'Max effort Strict Chest to bar',target:25,type:'reps'},
+    {id:'g13',name:'Max effort Kip Chest to bar',target:60,type:'reps'},
+  ],
+  weightlifting:[
+    {id:'w1',name:'1RM Snatch Balance',target:150,type:'kg'},
+    {id:'w2',name:'1RM Clean & Jerk',target:170,type:'kg'},
+    {id:'w3',name:'1RM Squat Clean',target:180,type:'kg'},
+    {id:'w4',name:'1RM Power Snatch',target:120,type:'kg'},
+    {id:'w5',name:'1RM Squat Snatch',target:140,type:'kg'},
+    {id:'w6',name:'1RM Jerk',target:180,type:'kg'},
+    {id:'w7',name:'1RM Power Clean',target:160,type:'kg'},
+  ],
+  strength:[
+    {id:'s1',name:'Cluster',target:130,type:'kg'},
+    {id:'s2',name:'Over Head Squat',target:160,type:'kg'},
+    {id:'s3',name:'1RM Back Squat',target:210,type:'kg'},
+    {id:'s4',name:'1RM Push Press',target:140,type:'kg'},
+    {id:'s5',name:'1RM Front Squat',target:190,type:'kg'},
+    {id:'s6',name:'1RM Deadlift',target:240,type:'kg'},
+    {id:'s7',name:'1RM Bench Press',target:150,type:'kg'},
+    {id:'s8',name:'1RM Shoulder Press',target:100,type:'kg'},
+  ],
+  workout:[
+    {id:'wk1',name:'800m Run',target:'2:40',type:'time'},
+    {id:'wk2',name:'Isabel',target:'1:20',type:'time'},
+    {id:'wk3',name:'400m Run',target:'1:15',type:'time'},
+    {id:'wk4',name:'Fran',target:'2:00',type:'time'},
+    {id:'wk5',name:'500m Row',target:'1:25',type:'time'},
+    {id:'wk6',name:'Grace',target:'1:20',type:'time'},
+    {id:'wk7',name:'Time 1000m Row',target:'3:00',type:'time'},
+    {id:'wk8',name:'Time 5000m Row',target:'18:00',type:'time'},
+    {id:'wk9',name:'Triple 3',target:'35:00',type:'time'},
+    {id:'wk10',name:'2000m Run',target:'6:30',type:'time'},
+    {id:'wk11',name:'10000m Bike Erg',target:'18:30',type:'time'},
+    {id:'wk12',name:'2000m Row',target:'6:30',type:'time'},
+    {id:'wk13',name:'5000m Ski Erg',target:'18:40',type:'time'},
+    {id:'wk14',name:'5000m Run',target:'19:30',type:'time'},
+  ]
+};
+
+const WEEK=[
+  {day:'LUNEDI',date:'1',month:'GIU',mod:'WM',mc:'#ff4500',rest:false,blocks:[
+    {tag:'PREP',sections:[
+      {t:'Power Clean & Jerk — BDP System 4/8',b:'3 Sets @20/15 · 10 Burpee Bar Overs · 10 Muscle Cleans · 10 Shoulder Presses · 10 Front Squats\n3 Power Clean & Push Jerks D&G\nTop Set: Find The Best Daily Performance\nBack Off: 3-5 x 3 @ -5/10% BDP — Rest: Every 2:30\nStop When Speed Or Technique Drops'},
+      {t:'Blocks Split Jerk',b:'3 Split Jerks D&G Off Blocks\nTop Set: Find The Best Daily Performance\nBack Off: 3-5 x 3 @ -5/10% BDP — Rest: Every 2:30'},
+      {t:'Clean Deadlift',b:'Clean Deadlift w/ 3" Pause Above Knee\n4x3 @ 95% 1RM — Rest: Every 3:00\nRe-Grip Each Rep on the Floor'},
+      {t:'Front Squat',b:'3 Front Squats — Top Set: Find Best Daily Performance\nBack Off: 4x3 @ Slightly Lighter Load — Rest: Every 3:00'},
+    ]},
+    {tag:'METCON',sections:[
+      {t:'OLYMPIC MOTEL [3:00 ON | 2:00 OFF x 4 Rounds]',b:'20 Bar Facing Burpees · 4 Hang Squat Cleans T&G · Max Cals Ski Erg\n18 Bar Facing Burpees · 3 Hang Squat Cleans T&G · Max Cals Ski Erg\n16 Bar Facing Burpees · 2 Hang Squat Cleans T&G · Max Cals Ski Erg\n14 Bar Facing Burpees · 1 Hang Squat Cleans T&G · Max Cals Ski Erg\nScore: KG + Cals'},
+    ]},
+    {tag:'BULLETPROOFING',sections:[
+      {t:'F | EMOM 12:00',b:'1°: 30" Max Reps HDU/DU\n2°: 30" Echo Bike\n3°: 30" Echo Bike Sprint\n4°: Rest'},
+    ]},
+  ]},
+  {day:'MARTEDI',date:'2',month:'GIU',mod:'MWG',mc:'#9b59b6',rest:false,blocks:[
+    {tag:'PREP',sections:[
+      {t:'A | Running Sesh — OLD SCHOOL ENGINE 4/8',b:'2 Sets · 200m Run · 20 Air Squats · 20 Walking Lunges\n2x200m Progressive Run | Rest 1:00\nRUN SESH: 6x800m — Rest 2:00 — Total: 3600m'},
+    ]},
+    {tag:'METCON',sections:[
+      {t:'PARALLAX [For Time]',b:'30 C2B Pull-ups\n30 Oa alt. BTN DB Box Step ups*\n1000/800m Row\n30 Wall-Ball Shots 12/9\n30 Oa alt. BTN DB Box Step ups\n30 C2B Pull-ups\nTC: 20:00 · VT: 12:00'},
+    ]},
+    {tag:'BULLETPROOFING',sections:[
+      {t:'F | Livelli Handstand',b:'L-3: 3-4 Sets · 25ft Handstand Walk + Ramp · 25ft Handstand Walk + Stairs · 20 GHD Hip Extensions · Rest 3:00\nL-2: 3 Sets · 25ft Handstand Walk · 25p Handstand Walk · 20 GHD Hip Extensions · Rest 3:00\nL-1: 3 Sets · 2:00 Walk to Wall Drill · 20 Alt MU Sit-ups · 20 GHD Hip Extensions · Rest 3:00'},
+    ]},
+  ]},
+  {day:'MERCOLEDI',date:'3',month:'GIU',mod:'W',mc:'#3498db',rest:false,blocks:[
+    {tag:'STRENGTH',sections:[
+      {t:'Deadlift — BDP System 4/8',b:'3 Deadlifts — Top Set: Find Best Daily Performance\nBack Off: 3x3 @ Same Or Slightly Lighter Load — Rest: Every 3:00\n+ 12 KB Goblet Cyclist Squat Tempo 31X1 ad ogni Back Off Set'},
+      {t:'Bench Press',b:'3 Bench Presses — Top Set: Find Best Daily Performance\nBack Off: 3x3 @ Same Or Slightly Lighter Load — Rest: Every 3:00\n+ 12 alt. KB Gorilla Rows ad ogni Back Off Set'},
+      {t:'Shoulder Press',b:'4x6 @ Same Load — Rest: Every 3:00'},
+    ]},
+    {tag:'BULLETPROOFING',sections:[
+      {t:'F | 3-4 Sets',b:'8-10/Side Barbell Cossack Squat\n8-10/Side Dumbbell Bulgarian Split Squat\n20m Double KB Duck Walk — Rest 1:30'},
+    ]},
+  ]},
+  {day:'GIOVEDI',date:'4',month:'GIU',mod:'Active Recovery',mc:'#888',rest:false,blocks:[
+    {tag:'RECOVERY',sections:[
+      {t:'A | Zone 2 Active Recovery',b:'1200m Run\n100m KB/DB Carry Mixed Grip (1 KB Front Rack + 1 KB OH Rack: 50m Switch)\n2400m Bike Erg\n100m Burpee Broad Jumps\n1200m Ski Erg\n100 Box Step ups @40cm\n\nZONE 2: 60-70% FC MAX — Conversazione possibile\nOpzione 2: COMPLETE REST se HRV basso o DOMS importanti'},
+    ]},
+  ]},
+  {day:'VENERDI',date:'5',month:'GIU',mod:'GM',mc:'#1abc9c',rest:false,blocks:[
+    {tag:'PREP',sections:[
+      {t:'A | Monostructural — EMOM 6:00',b:'1:00 Echo · 1:00 Row · 1:00 Jog\nMORNING MONO: [AMRAP 7:00] x 2\n50/40 Calorie Echo Bike → Max Cals Row with time left (Score)\nRest 3:00'},
+    ]},
+    {tag:'METCON',sections:[
+      {t:'CFG 2014 | BIATHLON [For Time]',b:'400m Run · 18 Ring Muscle-ups\n400m Run · 15 Ring Muscle-ups\n400m Run · 12 Ring Muscle-ups\n\nOgni volta che si rompe un set di Ring MU: +200m penalty Run\nTC: 18:00 · VT: 8:20'},
+    ]},
+    {tag:'BULLETPROOFING',sections:[
+      {t:'F | Rope Climb — Every 7" x 10-12 Reps',b:'Scegli 1 esercizio:\n- Legless Rope Climb w/ Vest\n- Seated to Seated Legless Rope Climb\n- Legless Rope Climb\n- Rope Climb w/ Vest\n- Laying to Stand Rope Climb'},
+    ]},
+  ]},
+  {day:'SABATO',date:'6',month:'GIU',mod:'GMW',mc:'#e67e22',rest:false,blocks:[
+    {tag:'PREP',sections:[
+      {t:'Snatch — BDP System 4/8',b:'3 Sets @20/15 · 10 Cals Ski · 10 Muscle Snatches · 10 Overhead Squats · 10 Snatch Balances\n3 Squat Snatches D&G\nTop Set: Find Best Daily Performance\nBack Off: 3-5 x 4 @ -5/10% BDP — Rest: Every 2:30'},
+      {t:'Snatch Balance',b:'3 Heaving Snatch Balance\nBack Off: 3x3 @ Bigger Load — Stop If Speed Or Lockout Drops'},
+      {t:'Snatch Pull',b:'4x3 @ 95% 1RM — Rest: Every 3:00 — Re-Grip Each Rep'},
+      {t:'Back Squat',b:'3 Back Squats — Top Set: Find Best Daily Performance\nBack Off: 4x3 — Rest: Every 3:00 — Tempo 31X1'},
+    ]},
+    {tag:'METCON',sections:[
+      {t:'VERTIGO [AMRAP 16:00 Ladder]',b:'20 Heavy DU · 3 x [1 Def. WW + 1 Def. C2W] · 3 Squat Snatches\n20 Heavy DU · 3 x [1 Def. WW + 1 Def. C2W] · 5 Squat Snatches\n20 Heavy DU · 3 x [1 Def. WW + 1 Def. C2W] · 7 Squat Snatches\n... +2 Def. C2W each Round\nScore: 3 x [Def. WW + Def. C2W] + Reps'},
+    ]},
+    {tag:'BULLETPROOFING',sections:[
+      {t:'F | TTB Livelli',b:'L-3: Accumula 100 TTB — set a cedimento — Rest 1:30 ogni volta che spazzi\nL-2: Accumula 80 TTB — set a cedimento — Rest 1:30\nL-1: 12 x 5 UB TTB | Rest 20-25"'},
+    ]},
+  ]},
+  {day:'DOMENICA',date:'7',month:'GIU',mod:'REST DAY',mc:'#555',rest:true,blocks:[]},
+];
+
+function ld(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch{return d;}}
+function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}}
+let vals=ld('dmntr_v2_vals',{});
+let scrs=ld('dmntr_v2_scrs',{});
+
+function findEx(id){for(const c of Object.values(EX))for(const e of c)if(e.id===id)return e;return null;}
+function pct(id){
+  const e=findEx(id);if(!e)return 0;
+  if(e.type==='time'){
+    const t=vals[id]||'00:00';
+    const[m,s]=t.split(':').map(Number);const a=m*60+s;
+    const[tm,ts]=e.target.split(':').map(Number);const tg=tm*60+ts;
+    if(!a||!tg)return 0;return Math.min(100,Math.round(tg/a*100));
+  }
+  const v=parseFloat(vals[id])||0;return Math.min(100,Math.round(v/e.target*100));
+}
+function ring(id,sz=44,sw=4){
+  const r=(sz-sw*2)/2,ci=2*Math.PI*r,p=pct(id),of=ci*(1-p/100),cl=p>=100?'#39ff14':'#ff8c00';
+  return`<svg width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}"><circle cx="${sz/2}" cy="${sz/2}" r="${r}" fill="none" stroke="#2a2a2a" stroke-width="${sw}"/><circle cx="${sz/2}" cy="${sz/2}" r="${r}" fill="none" stroke="${p===0?'#2a2a2a':cl}" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${ci.toFixed(1)}" stroke-dashoffset="${of.toFixed(1)}" transform="rotate(-90 ${sz/2} ${sz/2})"/></svg>`;
+}
+
+function buildCards(cat){
+  const con=document.getElementById('cat-'+cat);con.innerHTML='';
+  EX[cat].forEach(e=>{
+    const v=vals[e.id]||(e.type==='time'?'00:00':'');
+    const p=pct(e.id);
+    const card=document.createElement('div');card.className='xcard';card.id='card-'+e.id;
+    let inp;
+    if(e.type==='time'){
+      const[mm,ss]=(v||'00:00').split(':');
+      inp=`<div class="twrap"><input class="tinp" type="number" min="0" max="99" placeholder="00" value="${mm||'00'}" id="min-${e.id}" oninput="upT('${e.id}')"><span class="tsep">:</span><input class="tinp" type="number" min="0" max="59" placeholder="00" value="${ss||'00'}" id="sec-${e.id}" oninput="upT('${e.id}')"></div>`;
+    } else {
+      inp=`<input class="vinp" type="number" placeholder="0" value="${v}" id="inp-${e.id}" oninput="upV('${e.id}',this.value)">`;
+    }
+    card.innerHTML=`<div class="xhdr"><div class="xname">${e.name}</div><div class="xtgt"><div class="tlbl">TARGET</div><div class="tval">${e.target}</div></div></div>
+    <div class="xbody">${inp}<div class="rbwrap"><div class="rwrap" id="ring-${e.id}">${ring(e.id)}<div class="rtxt">${p>=100?'>100':p}%</div></div>
+    <button class="lbtn ${p===0?'z':''}" onclick="log('${e.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="${p===0?'#555':'#000'}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></button></div></div>`;
+    con.appendChild(card);
+  });
+}
+
+function upV(id,v){vals[id]=v;sv('dmntr_v2_vals',vals);refRing(id);}
+function upT(id){
+  const m=document.getElementById('min-'+id)?.value||'0';
+  const s=document.getElementById('sec-'+id)?.value||'0';
+  vals[id]=`${String(m).padStart(2,'0')}:${String(Math.min(59,parseInt(s)||0)).padStart(2,'0')}`;
+  sv('dmntr_v2_vals',vals);refRing(id);
+}
+function refRing(id){
+  const p=pct(id),rw=document.getElementById('ring-'+id);
+  if(rw)rw.innerHTML=ring(id)+`<div class="rtxt">${p>=100?'>100':p}%</div>`;
+}
+function log(id){sv('dmntr_v2_vals',vals);toast('SALVATO ✓');}
+
+function buildWeek(){
+  const grid=document.getElementById('week-grid');grid.innerHTML='';
+  WEEK.forEach((d,i)=>{
+    const dc=document.createElement('div');dc.className='dcard';
+    if(d.rest){
+      dc.innerHTML=`<div class="dhdr" style="cursor:default"><div class="dlft"><div class="dbadge"><div class="dnum">${d.date}</div><div class="dmon">${d.month}</div></div><div><div class="dname">${d.day}</div><div class="dmod" style="color:var(--gy)">REST DAY</div></div></div><span style="font-size:24px">😴</span></div>`;
+      grid.appendChild(dc);return;
+    }
+    let bh='';
+    d.blocks.forEach(b=>{
+      let sh='';
+      b.sections.forEach(s=>{sh+=`<div class="bsec">${s.t}</div><div class="btxt">${s.b}</div>`;});
+      bh+=`<div class="wkblock"><div class="btag">${b.tag}</div>${sh}</div>`;
+    });
+    const sc=scrs['sc'+i]||'';
+    dc.innerHTML=`<div class="dhdr" onclick="tgDay(${i})"><div class="dlft"><div class="dbadge"><div class="dnum">${d.date}</div><div class="dmon">${d.month}</div></div><div><div class="dname">${d.day}</div><div class="dmod" style="color:${d.mc}">${d.mod}</div></div></div><div class="dchev" id="chev${i}">▼</div></div>
+    <div class="dbody" id="body${i}">${bh}<div class="score-row"><span class="slbl">SCORE:</span><input class="sinp" placeholder="il tuo score…" value="${sc}" id="sc${i}" oninput="scrs['sc${i}']=this.value"><button class="sbtn" onclick="svSc(${i})">SALVA</button></div></div>`;
+    grid.appendChild(dc);
+  });
+}
+
+function tgDay(i){
+  document.getElementById('body'+i)?.classList.toggle('op');
+  document.getElementById('chev'+i)?.classList.toggle('op');
+}
+function svSc(i){scrs['sc'+i]=document.getElementById('sc'+i)?.value||'';sv('dmntr_v2_scrs',scrs);toast('SCORE SALVATO ✓');}
+
+function buildStats(){
+  const list=document.getElementById('stats-list');list.innerHTML='';
+  let tot=0,cnt=0;
+  Object.entries(EX).forEach(([cat,exs])=>{
+    const l=document.createElement('div');l.className='sclbl';l.textContent=cat.toUpperCase();list.appendChild(l);
+    exs.forEach(e=>{
+      const p=pct(e.id);tot+=p;cnt++;
+      const cl=p>=100?'#39ff14':p>=60?'#ff8c00':'#555';
+      const r=document.createElement('div');r.className='srow';
+      const vd=e.type==='time'?(vals[e.id]||'--'):(vals[e.id]||'0')+(e.type==='kg'?' kg':' reps');
+      r.innerHTML=`<div class="sname">${e.name}</div><div><div class="spct" style="color:${cl}">${p}%</div><div class="sval">${vd} / ${e.target}${e.type==='kg'?' kg':e.type==='reps'?' reps':''}</div></div>`;
+      list.appendChild(r);
+    });
+  });
+  const avg=cnt?Math.round(tot/cnt):0;
+  document.getElementById('opct').textContent=avg+'%';
+  document.getElementById('osub').textContent=`Media su ${cnt} esercizi`;
+  document.getElementById('oring').style.strokeDashoffset=(2*Math.PI*34*(1-avg/100)).toFixed(1);
+}
+
+function showPage(name){
+  ['massimali','week','stats'].forEach(p=>{document.getElementById('page-'+p).classList.toggle('hidden',p!==name);});
+  document.querySelectorAll('.ntab').forEach((t,i)=>{t.classList.toggle('on',['massimali','week','stats'][i]===name);});
+  if(name==='stats')buildStats();
+}
+function swCat(cat,el){
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('on'));el.classList.add('on');
+  ['gymnastic','weightlifting','strength','workout'].forEach(c=>{document.getElementById('cat-'+c).classList.toggle('hidden',c!==cat);});
+}
+function toast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),1800);
+}
+
+Object.keys(EX).forEach(c=>buildCards(c));
